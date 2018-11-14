@@ -7,8 +7,8 @@ from multiprocessing.dummy import Pool
 
 failures = {}
 
-num_evaled = 42
-top_count = 2
+num_evaled = 21
+top_count = 4
 
 def recentJobs(n):
     URL="https://jenkins.ovirt.org/job/kubevirt_kubevirt_standard-check-pr/api/xml"
@@ -39,8 +39,9 @@ def createIssue(namedetails, jobids, top_count, num_evaled):
     name, stdout, trace = namedetails
     num_failures = len(jobids)
     failed_job_urls = "\n".join(["- https://jenkins.ovirt.org/job/kubevirt_kubevirt_standard-check-pr/%s/testReport/" % j for j in jobids])
-
-    return """
+    issues = findExistingIssues(name)
+    cond_filed_as = "filed-as: %s" % issues if issues else ""
+    return """{cond_filed_as}
 "{name}" failed {num_failures} times
 
 /kind bug
@@ -67,12 +68,13 @@ Take a look at the failures in:
 
 Anything else we need to know?:
 This was automatically filed, because it was one of the TOP {top_count} failing tests.
-""".format(name=name, stdout=stdout, trace=trace, num_failures=num_failures, failed_job_urls=failed_job_urls, top_count=top_count, num_evaled=num_evaled)
+""".format(name=name, stdout=stdout, trace=trace, num_failures=num_failures, failed_job_urls=failed_job_urls, top_count=top_count, num_evaled=num_evaled, cond_filed_as=cond_filed_as)
 
-def isAlreadyAnIssue(name):
+def findExistingIssues(name):
     URL="https://api.github.com/search/issues"
-    data = {"q": "repo=kubevirt/kubevirt in:title is:open '%s'" % name}
-    return (requests.get(URL, data).json()["total_count"] > 0)
+    params = {"q": "user:kubevirt repo:kubevirt in:title is:open '%s'" % name}
+    resp = requests.get(URL, params=params)
+    return [i["url"] for i in resp.json()["items"]]
 
 if __name__ == "__main__":
     jobids = list(recentJobs(num_evaled))
@@ -80,5 +82,4 @@ if __name__ == "__main__":
     sortedFailures = list(reversed(sorted(failures.items(), key=lambda item: len(item[1]))))
     topFailures = sortedFailures[0:top_count]
     print("---\n".join(createIssue(failure, jobids, top_count, num_evaled)
-                       for (failure, jobids) in topFailures
-                       if not isAlreadyAnIssue(failure[0])))
+                       for (failure, jobids) in topFailures))
