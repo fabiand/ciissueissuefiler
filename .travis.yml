@@ -5,6 +5,7 @@ addons:
     packages:
       - python3
       - python3-lxml
+      - python3-requests
 
 script:
 - make find
