@@ -15,18 +15,28 @@ csplit -z -f found-issue- all-found-issues "/^---/" "{*}"
 3087
 1629
 1734
-$ export GITHUB_TOKEN=<your-token>
 ```
 
-Filing:
+Finding what to file:
 ```
 $ make file
-for ISSUE in $(ls -1 found-issue*); do grep -q filed-as $ISSUE && ( echo -n "$ISSUE " ; grep filed-as $ISSUE ) || hub issue create -F $ISSUE ; done
-found-issue-00 filed-as: ['https://api.github.com/repos/kubevirt/kubevirt/issues/1703']
-Aborted: the origin remote doesn't point to a GitHub repository.
-found-issue-02 filed-as: ['https://api.github.com/repos/kubevirt/kubevirt/issues/1689']
-found-issue-03 filed-as: ['https://api.github.com/repos/kubevirt/kubevirt/issues/1701']
-
+for ISSUE in $(ls -1 found-issue*); do echo $ISSUE ; grep -q filed-as $ISSUE && grep filed-as $ISSUE || echo hub issue create -F $ISSUE ; done
+found-issue-00
+filed-as: ['https://api.github.com/repos/kubevirt/kubevirt/issues/1703']
+found-issue-01
+hub issue create -F found-issue-01
+found-issue-02
+filed-as: ['https://api.github.com/repos/kubevirt/kubevirt/issues/1689']
+found-issue-03
+filed-as: ['https://api.github.com/repos/kubevirt/kubevirt/issues/1701']
 ```
 
 This fails. You need to do this from the kubevirt repository.
+
+Filing:
+```
+$ cd <to-your.kubevirt-checkout>
+$ export GITHUB_TOKEN=<your-token>  # Or not, then you can login with username/password
+$ hub issue create -F /home/fabiand/kubevirt/ciissueissuefiler/found-issue-01
+https://github.com/kubevirt/kubevirt/issues/1708
+```

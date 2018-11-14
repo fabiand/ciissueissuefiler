@@ -5,7 +5,7 @@ find:
 	csplit -z -f found-issue- all-found-issues "/^---/" "{*}"
 
 file:
-	for ISSUE in $$(ls -1 found-issue*); do grep -q filed-as $$ISSUE && ( echo -n "$$ISSUE " ; grep filed-as $$ISSUE ) || hub issue create -F $$ISSUE ; done
+	for ISSUE in $$(ls -1 found-issue*); do echo $$ISSUE ; grep -q filed-as $$ISSUE && grep filed-as $$ISSUE || echo hub issue create -F $$(realpath $$ISSUE) ; done
 
 clean:
 	-rm -v *found-issue*
