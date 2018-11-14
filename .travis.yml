@@ -13,3 +13,5 @@ script:
 - make find-unfiled
 # Next line checks if anything needs to be created
 - test $(make find-unfiled | wc -l) -eq 0 
+# Hack to get hub to point to correct repo
+- git config --replace-all remote.origin.url git@github.com:kubevirt/kubevirt.git
