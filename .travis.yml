@@ -9,4 +9,6 @@ addons:
 
 script:
 - make find
-- make file
+- make file | tee log
+# Next line checks if anything needs to be created
+- grep -v "hub issue create" log
