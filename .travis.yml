@@ -1,0 +1,11 @@
+language: generic
+
+addons:
+  apt:
+    packages:
+      - python3
+      - python3-lxml
+
+script:
+- make find
+- make file
