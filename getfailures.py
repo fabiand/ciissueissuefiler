@@ -74,7 +74,7 @@ def findExistingIssues(name):
     URL="https://api.github.com/search/issues"
     params = {"q": "user:kubevirt repo:kubevirt in:title is:open '%s'" % name}
     resp = requests.get(URL, params=params)
-    return [i["url"] for i in resp.json()["items"]]
+    return [(i["url"], i["assignee"]["login"] if len(i["assignee"]) > 0 else None) for i in resp.json()["items"]]
 
 if __name__ == "__main__":
     jobids = list(recentJobs(num_evaled))
