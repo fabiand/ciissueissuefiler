@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/fabiand/ciissueissuefiler.svg?branch=master)](https://travis-ci.com/fabiand/ciissueissuefiler)
+
 # Goal
 
 Automatically discover often reoccurring failing testcases in our Ci and automatically file them if they are not already filed.
