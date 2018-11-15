@@ -11,4 +11,4 @@ script:
 - make find
 - make file | tee log
 # Next line checks if anything needs to be created
-- [[ $(grep 'hub issue create' log | wc -l) -eq 0 ]]
+- test $(grep 'hub issue create' log | wc -l) -eq 0 
