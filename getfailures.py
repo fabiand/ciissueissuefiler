@@ -7,8 +7,8 @@ from multiprocessing.dummy import Pool
 
 failures = {}
 
-num_evaled = 21
-top_count = 4
+num_evaled = 10
+top_count = 5
 
 def recentJobs(n):
     URL="https://jenkins.ovirt.org/job/kubevirt_kubevirt_standard-check-pr/api/xml"
