@@ -10,5 +10,6 @@ addons:
 script:
 - make find
 - make file | tee log
+- make find-unfiled
 # Next line checks if anything needs to be created
-- test $(grep 'hub issue create' log | wc -l) -eq 0 
+- test $(make find-unfiled | wc -l) -eq 0 

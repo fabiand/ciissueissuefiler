@@ -6,8 +6,11 @@ find:
 	csplit -z -f found-issue- all-found-issues "/^---/" "{*}"
 	sed -i "/^---/ d" found-issue-*
 
+find-unfiled:
+	@for ISSUE in $$(ls -1 found-issue*); do grep -q filed-as $$ISSUE && true || echo $$ISSUE ; done
+
 file:
-	for ISSUE in $$(ls -1 found-issue*); do echo $$ISSUE ; grep -q filed-as $$ISSUE && grep filed-as $$ISSUE || echo hub issue create -F $$PWD/$$ISSUE ; done
+	make find-unfiled | xargs -P 1 echo hub issue create -F
 
 clean:
 	-rm -v *found-issue*
