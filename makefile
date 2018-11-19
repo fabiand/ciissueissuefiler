@@ -2,6 +2,7 @@ all: clean find
 
 find:
 	python3 getfailures.py | tee all-found-issues
+	sed -i "/^# / d" all-found-issues
 	csplit -z -f found-issue- all-found-issues "/^---/" "{*}"
 	sed -i "/^---/ d" found-issue-*
 
