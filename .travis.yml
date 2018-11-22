@@ -17,4 +17,4 @@ before_script:
 script:
 - make find
 - make find-unfiled
-- make file | bash -x
+- make file | bash -ex
