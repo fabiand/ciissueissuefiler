@@ -18,5 +18,3 @@ script:
 - make find
 - make find-unfiled
 - make file | bash -x
-# Next line checks if anything needs to be created
-- test $(make find-unfiled | wc -l) -eq 0 
