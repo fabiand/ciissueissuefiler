@@ -8,7 +8,7 @@ addons:
       - python3-requests
 
 before_script:
-- curl -L https://fabiand:$GITHUB_TOKEN@github.com/github/hub/releases/download/v2.5.0/hub-linux-amd64-2.5.0.tgz | tar xz --strip-components=2 hub-linux-amd64-2.5.0/bin/hub
+- curl -L https://$GITHUB_USER:$GITHUB_TOKEN@github.com/github/hub/releases/download/v2.5.0/hub-linux-amd64-2.5.0.tgz | tar xz --strip-components=2 hub-linux-amd64-2.5.0/bin/hub
 - export PATH=$PATH:$PWD
 - git config credential.helper "/bin/bash $PWD/credential-helper.sh"
 # Hack to get hub to point to correct repo
