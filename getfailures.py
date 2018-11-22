@@ -63,8 +63,8 @@ def failuresOfJob(jobid):
       xml = requests.get(URL).text
       tree = etree.fromstring(xml)
     except Exception as e:
-      log("Failed to parse job %s" % jobid)
-      return [("Failed to parse error result of job #%s" % jobid, URL, "N/A")]
+      log("Failed to parse job %s. It was probably aborted" % jobid)
+      return [(None, URL, "N/A")]
     
     fragments = tree.xpath("//case[status='FAILED' or status='REGRESSION']")
     
@@ -123,7 +123,7 @@ def findExistingIssues(name):
     URL="https://api.github.com/search/issues"
     params = {"q": "user:kubevirt repo:kubevirt in:title is:open '%s'" % name}
     resp = requests.get(URL, auth=auth, params=params)
-    openissues = [(i["url"], i["assignee"]["login"] if len(i["assignee"]) > 0 else None) for i in resp.json()["items"]]
+    openissues = [(i["url"], i["assignee"]["login"] if i["assignee"] is not None else None) for i in resp.json()["items"]]
     return openissues
 
 def findExistingClosedIssues(name):
