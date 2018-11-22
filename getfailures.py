@@ -80,7 +80,7 @@ def appendFailures(jobid):
 def createIssue(namedetails, jobids, top_count, num_evaled):
     name, stdout, trace = namedetails
     num_failures = len(jobids)
-    failed_job_urls = "\n".join(["- https://jenkins.ovirt.org/job/kubevirt_kubevirt_standard-check-pr/%s/testReport/" % j for j in jobids])
+    failed_job_urls = "\n".join(["- https://jenkins.ovirt.org/job/kubevirt_kubevirt_standard-check-pr/{job}/testReport/ [Console output](https://jenkins.ovirt.org/job/kubevirt_kubevirt_standard-check-pr/{job}/consoleText)".format(job=j) for j in jobids])
     issues = findExistingIssues(name)
     closedissues = findExistingClosedIssues(name)
     if issues:
