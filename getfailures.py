@@ -63,8 +63,8 @@ def failuresOfJob(jobid):
       xml = requests.get(URL).text
       tree = etree.fromstring(xml)
     except Exception as e:
-      log("Failed to parse job %s" % jobid)
-      return [("Failed to parse error result of job #%s" % jobid, URL, "N/A")]
+      log("Failed to parse job %s. It was probably aborted" % jobid)
+      return [(None, URL, "N/A")]
     
     fragments = tree.xpath("//case[status='FAILED' or status='REGRESSION']")
     
