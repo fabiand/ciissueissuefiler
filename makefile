@@ -10,7 +10,7 @@ find-unfiled:
 	@for ISSUE in $$(ls -1 found-issue*); do grep -q filed-as $$ISSUE && true || echo $$ISSUE ; done
 
 file:
-	make find-unfiled | xargs -P 1 echo hub issue create -F
+	make -s find-unfiled | while read ISSUE; do echo hub issue create -F $$ISSUE ; done
 
 clean:
 	-rm -v *found-issue*
