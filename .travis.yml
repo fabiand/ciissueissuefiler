@@ -9,13 +9,14 @@ addons:
 
 before_script:
 - curl -L https://fabiand:$GITHUB_TOKEN@github.com/github/hub/releases/download/v2.5.0/hub-linux-amd64-2.5.0.tgz | tar xz --strip-components=2 hub-linux-amd64-2.5.0/bin/hub
+- export PATH=$PATH:$PWD
 - git config credential.helper "/bin/bash $PWD/credential-helper.sh"
 # Hack to get hub to point to correct repo
 - git config --replace-all remote.origin.url git@github.com:kubevirt/kubevirt.git
 
 script:
 - make find
-- make file | tee log
-- make find-unfiled | bash -x
+- make find-unfiled
+- make file | bash -x
 # Next line checks if anything needs to be created
 - test $(make find-unfiled | wc -l) -eq 0 
