@@ -10,8 +10,12 @@ import datetime
 
 failures = {}
 
+# Number of merged PRs to evaluate
 num_evaled = 8
+# Number of unique tests to repotr
 top_count = 8
+# Number of times the same tests needs to fail in the num_evaled before it gets reported
+min_occurrences = 1
 
 def log(msg):
     print ("# %s" % msg)
@@ -137,6 +141,9 @@ def findExistingClosedIssues(name):
 if __name__ == "__main__":
     jobids = list(recentJobs(num_evaled))
     list(Pool(8).map(lambda i: appendFailures(i), jobids))
+    print("# Found %s failures" % len(failures))
+    failures = {f[0]:f[1] for f in failures.items() if len(f[1]) > min_occurrences}
+    print("# Found %s failures with more than %s occurrences" % (len(failures), min_occurrences))
     sortedFailures = list(reversed(sorted(failures.items(), key=lambda item: len(item[1]))))
     topFailures = sortedFailures[0:top_count]
     print("---\n".join(createIssue(failure, jobids, top_count, num_evaled)
